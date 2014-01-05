@@ -5,17 +5,20 @@
 
 #include <QtCore/QDebug>
 
+#include <iostream>
+
 namespace logger
 {
 
 using namespace std;
 
 logger::Logger::Level Logger::level = Logger::Verbose;
+//Logger::myinit();
 
 Logger::Logger(string clazz, string func, int line, Level lvl, bool logif) :
     logif(logif && doLog(lvl))
 {
-    qDebug() << "this->logif is:" << this->logif << "logif is:" << logif << "dolog is:" << doLog(lvl);
+    //qDebug() << "this->logif is:" << this->logif << "logif is:" << logif << "dolog is:" << doLog(lvl);
    if (this->logif)
    {
         QString t(QDateTime::currentDateTime().toString(Qt::ISODate));
@@ -27,7 +30,13 @@ Logger::Logger(string clazz, string func, int line, Level lvl, bool logif) :
    }
 }
 
-void noMessageOutput(QtMsgType, const char *) {}
+void Logger::msgHandler(QtMsgType type, const QMessageLogContext &context, const QString &msg)
+{
+    Q_UNUSED(type);
+    Q_UNUSED(context);
+    Q_UNUSED(msg);
+    std::cout << "I am here" << endl;
+}
 
 QDebug Logger::log()
 {
