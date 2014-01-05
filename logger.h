@@ -36,8 +36,6 @@ public:
     Logger(std::string clazz, std::string func, int line, Level lvl, bool logif);
     QDebug log();
 
-
-
     static void setLogLevel(Level level = Verbose)
     {
         level = level;
@@ -51,11 +49,12 @@ public:
 
 private:
     QString msg;
+    QString dummyStr;
     bool logif;
-    static Level level;
 
-    QString lvlName(Level level) const;
-    inline bool doLog(Level level) const;
+    static Level level;
+    static inline QString lvlName(Level level);
+    static inline bool doLog(Level level);
 };
 
 //Logger::init();

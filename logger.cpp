@@ -2,7 +2,8 @@
 
 #include <QBuffer>
 #include <QDateTime>
-#include <QtCore/QNoDebug>
+
+#include <QtCore/QDebug>
 
 namespace logger
 {
@@ -12,9 +13,9 @@ using namespace std;
 logger::Logger::Level Logger::level = Logger::Verbose;
 
 Logger::Logger(string clazz, string func, int line, Level lvl, bool logif) :
-    logif(logif || doLog(lvl))
+    logif(logif && doLog(lvl))
 {
-   if (logif)
+   if (this->logif)
    {
         QString t(QDateTime::currentDateTime().toString(Qt::ISODate));
         QString c = QString::fromStdString(clazz);
@@ -25,14 +26,24 @@ Logger::Logger(string clazz, string func, int line, Level lvl, bool logif) :
    }
 }
 
+void noMessageOutput(QtMsgType, const char *) {}
+
 QDebug Logger::log()
 {
-    QDebug d(QtDebugMsg);
-    d << msg;
-    return d;
+    if (logif)
+    {
+        QDebug writer(QtDebugMsg);
+        writer << msg;
+        return writer;
+    }
+    else
+    {
+        QDebug d(&dummyStr);
+        return d;
+    }
 }
 
-inline QString Logger::lvlName(Level level) const
+inline QString Logger::lvlName(Level level)
 {
     switch(level)
     {
@@ -46,9 +57,10 @@ inline QString Logger::lvlName(Level level) const
     }
 }
 
-inline bool Logger::doLog(Level level) const
+inline bool Logger::doLog(Level level)
 {
     return Logger::level <= level;
 }
+
 
 }
