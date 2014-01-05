@@ -15,6 +15,7 @@ logger::Logger::Level Logger::level = Logger::Verbose;
 Logger::Logger(string clazz, string func, int line, Level lvl, bool logif) :
     logif(logif && doLog(lvl))
 {
+    qDebug() << "this->logif is:" << this->logif << "logif is:" << logif << "dolog is:" << doLog(lvl);
    if (this->logif)
    {
         QString t(QDateTime::currentDateTime().toString(Qt::ISODate));
@@ -59,7 +60,7 @@ inline QString Logger::lvlName(Level level)
 
 inline bool Logger::doLog(Level level)
 {
-    return Logger::level <= level;
+    return level <= Logger::level;
 }
 
 

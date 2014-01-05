@@ -3,25 +3,42 @@
 
 #include "logger_global.h"
 
-#include <QDebug>
+#include <QtCore>
 
 namespace logger
 {
 
-//#define LOG_FATAL(logif) Logger(__CLASS__, __func__, __LINE__, LOG_FATAL, logif).log()
+#define TOKEN_TO_STRING(TOK) # TOK
+#define STRINGIZE_TOKEN(TOK) TOKEN_TO_STRING(TOK)
+
+#define LOG_FATAL(...)                                                              \
+    Logger(__CLASS__, __func__, __LINE__, logger::Logger::Fatal,                    \
+    ((QString(STRINGIZE_TOKEN(__VA_ARGS__)).isEmpty()) ? true : __VA_ARGS__)).log()
 
 
-//#define LOG_CRITICAL(logif) Logger(__CLASS__, __func__, __LINE__, LOG_CRITICAL, logif).log()
-//#define LOG_WARNING(logif) Logger(__CLASS__, __func__, __LINE__, LOG_WARNING, logif).log()
+#define LOG_CRITICAL(...)                                                           \
+    Logger(__CLASS__, __func__, __LINE__, logger::Logger::Critical,                 \
+    ((QString(STRINGIZE_TOKEN(__VA_ARGS__)).isEmpty()) ? true : __VA_ARGS__)).log()
 
 
-#define LOG_INFO(...)                                                                                                       \
-    bool _$_b_$_[] = { __VA_ARGS__ };                                                                                       \
-    Logger(__CLASS__, __func__, __LINE__, logger::Logger::Info, ((sizeof _$_b_$_ == 0) ? true : _$_b_$_[0])).log()
+#define LOG_WARNING(...)                                                            \
+    Logger(__CLASS__, __func__, __LINE__, logger::Logger::Warning,                  \
+    ((QString(STRINGIZE_TOKEN(__VA_ARGS__)).isEmpty()) ? true : __VA_ARGS__)).log()
 
 
-//#define LOG_DEBUG(logif) Logger(__CLASS__, __func__, __LINE__, LOG_DEBUG, logif).log()
-//#define LOG_VERBOSE(logif) Logger(__CLASS__, __func__, __LINE__, LOG_VERBOSE, logif).log()
+#define LOG_INFO(...)                                                               \
+    Logger(__CLASS__, __func__, __LINE__, logger::Logger::Info,                     \
+    ((QString(STRINGIZE_TOKEN(__VA_ARGS__)).isEmpty()) ? true : __VA_ARGS__)).log()
+
+
+#define LOG_DEBUG(...)                                                              \
+    Logger(__CLASS__, __func__, __LINE__, logger::Logger::Debug,                    \
+    ((QString(STRINGIZE_TOKEN(__VA_ARGS__)).isEmpty()) ? true : __VA_ARGS__)).log()
+
+
+#define LOG_VERBOSE(...)                                                            \
+    Logger(__CLASS__, __func__, __LINE__, logger::Logger::Verbose,                  \
+    ((QString(STRINGIZE_TOKEN(__VA_ARGS__)).isEmpty()) ? true : __VA_ARGS__)).log()
 
 
 class LOGGERSHARED_EXPORT Logger
@@ -45,7 +62,6 @@ public:
     {
         setLogLevel();
     }
-
 
 private:
     QString msg;
