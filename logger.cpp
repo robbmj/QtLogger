@@ -12,13 +12,12 @@ namespace logger
 
 using namespace std;
 
-logger::Logger::Level Logger::level = Logger::Verbose;
-//Logger::myinit();
+logger::LoggerCfg *Logger::cfg = new LoggerCfg();
+QTextStream Logger::cout(stdout, QIODevice::WriteOnly);
 
 Logger::Logger(string clazz, string func, int line, Level lvl, bool logif) :
     logif(logif && doLog(lvl))
 {
-    //qDebug() << "this->logif is:" << this->logif << "logif is:" << logif << "dolog is:" << doLog(lvl);
    if (this->logif)
    {
         QString t(QDateTime::currentDateTime().toString(Qt::ISODate));
@@ -34,8 +33,20 @@ void Logger::msgHandler(QtMsgType type, const QMessageLogContext &context, const
 {
     Q_UNUSED(type);
     Q_UNUSED(context);
-    Q_UNUSED(msg);
-    std::cout << "I am here" << endl;
+
+    if (cfg->logToConsole)
+    {
+        cout << msg << "\n";
+        if (cfg->flushImmediatly)
+        {
+            cout.flush();
+        }
+    }
+
+    if (cfg->logWriter != NULL && cfg->logDest != NULL)
+    {
+        *cfg->logWriter << msg << "\n";
+    }
 }
 
 QDebug Logger::log()
@@ -57,9 +68,9 @@ inline QString Logger::lvlName(Level level)
 {
     switch(level)
     {
-        case Fatal: return QString("FATAL");
-        case Critical: return QString("CRITICAL");
-        case Warning: return QString("WARNING");
+        case Fatal: return QString("***FATAL***");
+        case Critical: return QString("**CRITICAL**");
+        case Warning: return QString("*WARNING*");
         case Info: return QString("INFO");
         case Debug: return QString("DEBUG");
         case Verbose: return QString("VERBOSE");
@@ -69,8 +80,7 @@ inline QString Logger::lvlName(Level level)
 
 inline bool Logger::doLog(Level level)
 {
-    return level <= Logger::level;
+    return level <= cfg->logLvl;
 }
-
 
 }
