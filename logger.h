@@ -13,33 +13,33 @@ namespace logger
 #define MACRO_ROUTER(x, A, FUNC, ...)  FUNC
 
 
-#define PRIVATE_LOG_FATAL_0()           Logger(__CLASS__, __func__, __LINE__, logger::Fatal).log()
-#define PRIVATE_LOG_FATAL_1(logIf)      Logger(__CLASS__, __func__, __LINE__, logger::Fatal, logIf).log()
+#define PRIVATE_LOG_FATAL_0()           (logger::Logger(__CLASS__, __func__, __LINE__, logger::Fatal, true)).log()
+#define PRIVATE_LOG_FATAL_1(logIf)      (logger::Logger(__CLASS__, __func__, __LINE__, logger::Fatal, logIf)).log()
 #define LOG_FATAL(...)                  MACRO_ROUTER(,##__VA_ARGS__, PRIVATE_LOG_FATAL_1(__VA_ARGS__), PRIVATE_LOG_FATAL_0(__VA_ARGS__))
 
 
-#define PRIVATE_LOG_CRITICAL_0()        Logger(__CLASS__, __func__, __LINE__, logger::Critical).log()
-#define PRIVATE_LOG_CRITICAL_1(logIf)   Logger(__CLASS__, __func__, __LINE__, logger::Critical, logIf).log()
+#define PRIVATE_LOG_CRITICAL_0()        (logger::Logger(__CLASS__, __func__, __LINE__, logger::Critical, true)).log()
+#define PRIVATE_LOG_CRITICAL_1(logIf)   (logger::Logger(__CLASS__, __func__, __LINE__, logger::Critical, logIf)).log()
 #define LOG_CRITICAL(...)               MACRO_ROUTER(,##__VA_ARGS__, PRIVATE_LOG_CRITICAL_1(__VA_ARGS__), PRIVATE_LOG_CRITICAL_0(__VA_ARGS__))
 
 
-#define PRIVATE_LOG_WARNING_0()         Logger(__CLASS__, __func__, __LINE__, logger::Warning).log()
-#define PRIVATE_LOG_WARNING_1(logIf)    Logger(__CLASS__, __func__, __LINE__, logger::Warning, logIf).log()
+#define PRIVATE_LOG_WARNING_0()         (logger::Logger(__CLASS__, __func__, __LINE__, logger::Warning, true)).log()
+#define PRIVATE_LOG_WARNING_1(logIf)    (logger::Logger(__CLASS__, __func__, __LINE__, logger::Warning, logIf)).log()
 #define LOG_WARNING(...)                MACRO_ROUTER(,##__VA_ARGS__, PRIVATE_LOG_WARNING_1(__VA_ARGS__), PRIVATE_LOG_WARNING_0(__VA_ARGS__))
 
 
-#define PRIVATE_LOG_INFO_0()            Logger(__CLASS__, __func__, __LINE__, logger::Info).log()
-#define PRIVATE_LOG_INFO_1(logIf)       Logger(__CLASS__, __func__, __LINE__, logger::Info, logIf).log()
+#define PRIVATE_LOG_INFO_0()            (logger::Logger(__CLASS__, __func__, __LINE__, logger::Info, true)).log()
+#define PRIVATE_LOG_INFO_1(logIf)       (logger::Logger(__CLASS__, __func__, __LINE__, logger::Info, logIf)).log()
 #define LOG_INFO(...)                   MACRO_ROUTER(,##__VA_ARGS__, PRIVATE_LOG_INFO_1(__VA_ARGS__), PRIVATE_LOG_INFO_0(__VA_ARGS__))
 
 
-#define PRIVATE_LOG_DEBUG_0()           Logger(__CLASS__, __func__, __LINE__, logger::Debug).log()
-#define PRIVATE_LOG_DEBUG_1(logIf)      Logger(__CLASS__, __func__, __LINE__, logger::Debug, logIf).log()
+#define PRIVATE_LOG_DEBUG_0()           (logger::Logger(__CLASS__, __func__, __LINE__, logger::Debug, true)).log()
+#define PRIVATE_LOG_DEBUG_1(logIf)      (logger::Logger(__CLASS__, __func__, __LINE__, logger::Debug, logIf)).log()
 #define LOG_DEBUG(...)                  MACRO_ROUTER(,##__VA_ARGS__, PRIVATE_LOG_DEBUG_1(__VA_ARGS__), PRIVATE_LOG_DEBUG_0(__VA_ARGS__))
 
 
-#define PRIVATE_LOG_VERBOSE_0()         Logger(__CLASS__, __func__, __LINE__, logger::Verbose).log()
-#define PRIVATE_LOG_VERBOSE_1(logIf)    Logger(__CLASS__, __func__, __LINE__, logger::Verbose, logIf).log()
+#define PRIVATE_LOG_VERBOSE_0()         (logger::Logger(__CLASS__, __func__, __LINE__, logger::Verbose, true)).log()
+#define PRIVATE_LOG_VERBOSE_1(logIf)    (logger::Logger(__CLASS__, __func__, __LINE__, logger::Verbose, logIf)).log()
 #define LOG_VERBOSE(...)                MACRO_ROUTER(,##__VA_ARGS__, PRIVATE_LOG_VERBOSE_1(__VA_ARGS__), PRIVATE_LOG_VERBOSE_0(__VA_ARGS__))
 
 enum Level {
@@ -100,29 +100,11 @@ class LOGGERSHARED_EXPORT Logger
     
 public:
 
-    Logger(std::string clazz, std::string func, int line, Level lvl, bool logif = true);
+    Logger(const std::string &clazz, const std::string &func, int line, Level lvl, bool logif);
     QDebug log();
 
-    static void init(LoggerCfg *loggerCgf = NULL)
-    {
-        if (loggerCgf != NULL)
-        {
-            destroy();
-            Logger::cfg = loggerCgf;
-        }
-
-        qInstallMessageHandler(msgHandler);
-    }
-
-    static void destroy()
-    {
-        if (Logger::cfg != NULL)
-        {
-            delete Logger::cfg;
-            Logger::cfg = NULL;
-        }
-    }
-
+    static void init(LoggerCfg *loggerCgf = NULL);
+    static void destroy();
     static void msgHandler(QtMsgType type, const QMessageLogContext &context, const QString &msg);
 
 private:
