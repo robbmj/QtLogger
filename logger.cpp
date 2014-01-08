@@ -15,17 +15,51 @@ using namespace std;
 logger::LoggerCfg *Logger::cfg = new LoggerCfg();
 QTextStream Logger::cout(stdout, QIODevice::WriteOnly);
 
+LoggerCfg::LoggerCfg(bool logToConsole, bool flushImmediatly, logger::Level logLvl, QIODevice *logDest) :
+    logToConsole(logToConsole),
+    flushImmediatly(flushImmediatly),
+    logLvl(logLvl),
+    logDest(logDest)
+{
+    if (logDest->open(QIODevice::WriteOnly | QIODevice::Append))
+    {
+        logWriter = new QTextStream(logDest);
+    }
+    else
+    {
+        throw "Can't open log device";
+    }
+}
+
+LoggerCfg::LoggerCfg() :
+    logToConsole(true),
+    flushImmediatly(true),
+    logLvl(logger::Verbose),
+    logDest(NULL),
+    logWriter(NULL)
+{
+
+}
+
+LoggerCfg::~LoggerCfg()
+{
+    if (logWriter != NULL)
+    {
+        delete logWriter;
+        logWriter = NULL;
+    }
+    if (logDest != NULL)
+    {
+        delete logDest;
+        logDest = NULL;
+    }
+}
+
 Logger::Logger(const string &clazz, const string &func, int line, Level lvl, bool logif) :
     logif(logif && doLog(lvl))
 {
    if (this->logif)
    {
-        //QString t(QDateTime::currentDateTime().toString(Qt::ISODate));
-        //QString c = QString::fromStdString(clazz);
-        //QString f = QString::fromStdString(func);
-        //QString l = QString::number(line);
-        //QString m = lvlName(lvl);
-
        // the log level name
        msg = lvlName(lvl) +
 
@@ -43,28 +77,6 @@ Logger::Logger(const string &clazz, const string &func, int line, Level lvl, boo
    }
 }
 
-void Logger::msgHandler(QtMsgType type, const QMessageLogContext &context, const QString &msg)
-{
-    Q_UNUSED(type);
-    Q_UNUSED(context);
-
-
-        if (cfg->logToConsole)
-        {
-            cout << msg << "\n";
-            if (cfg->flushImmediatly)
-            {
-                cout.flush();
-            }
-        }
-
-        if (cfg->logWriter != NULL && cfg->logDest != NULL)
-        {
-            *cfg->logWriter << msg << "\n";
-        }
-
-}
-
 QDebug Logger::log()
 {
     if (logif)
@@ -79,6 +91,27 @@ QDebug Logger::log()
         writer << msg;
         return writer;
     }
+}
+
+void Logger::msgHandler(QtMsgType type, const QMessageLogContext &context, const QString &msg)
+{
+    Q_UNUSED(type);
+    Q_UNUSED(context);
+
+    if (cfg->logToConsole)
+    {
+        cout << msg << "\n";
+        if (cfg->flushImmediatly)
+        {
+            cout.flush();
+        }
+    }
+
+    if (cfg->logWriter != NULL && cfg->logDest != NULL)
+    {
+        *cfg->logWriter << msg << "\n";
+    }
+
 }
 
 inline QString Logger::lvlName(Level level)

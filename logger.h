@@ -54,52 +54,15 @@ typedef struct LoggerCfg
     QIODevice *logDest;
     QTextStream *logWriter;
 
-    LoggerCfg(bool logToConsole, bool flushImmediatly, logger::Level logLvl, QIODevice *logDest) :
-        logToConsole(logToConsole),
-        flushImmediatly(flushImmediatly),
-        logLvl(logLvl),
-        logDest(logDest)
-    {
-        if (logDest->open(QIODevice::WriteOnly | QIODevice::Append))
-        {
-            logWriter = new QTextStream(logDest);
-        }
-        else
-        {
-            throw "Can't open log device";
-        }
-    }
+    LoggerCfg(bool logToConsole, bool flushImmediatly, logger::Level logLvl, QIODevice *logDest);
+    LoggerCfg();
+    ~LoggerCfg();
 
-    LoggerCfg() :
-        logToConsole(true),
-        flushImmediatly(true),
-        logLvl(logger::Verbose),
-        logDest(NULL),
-        logWriter(NULL)
-    {
-
-    }
-
-    ~LoggerCfg()
-    {
-        if (logWriter != NULL)
-        {
-            delete logWriter;
-            logWriter = NULL;
-        }
-        if (logDest != NULL)
-        {
-            delete logDest;
-            logDest = NULL;
-        }
-    }
 } LoggerCfg;
 
 class LOGGERSHARED_EXPORT Logger
 {
-    
 public:
-
     Logger(const std::string &clazz, const std::string &func, int line, Level lvl, bool logif);
     QDebug log();
 
@@ -116,7 +79,6 @@ private:
     static LoggerCfg *cfg;
     static inline QString lvlName(Level level);
     static inline bool doLog(Level level);
-
 };
 
 }
