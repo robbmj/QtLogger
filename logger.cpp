@@ -31,6 +31,22 @@ LoggerCfg::LoggerCfg(bool logToConsole, bool flushImmediatly, logger::Level logL
     }
 }
 
+LoggerCfg::LoggerCfg(QIODevice *logDest) :
+    logToConsole(true),
+    flushImmediatly(true),
+    logLvl(logger::Verbose),
+    logDest(logDest)
+{
+    if (logDest->open(QIODevice::WriteOnly | QIODevice::Append))
+    {
+        logWriter = new QTextStream(logDest);
+    }
+    else
+    {
+        throw "Can't open log device";
+    }
+}
+
 LoggerCfg::LoggerCfg() :
     logToConsole(true),
     flushImmediatly(true),
@@ -98,20 +114,26 @@ void Logger::msgHandler(QtMsgType type, const QMessageLogContext &context, const
     Q_UNUSED(type);
     Q_UNUSED(context);
 
-    if (cfg->logToConsole)
+    if (cfg != NULL)
     {
-        cout << msg << "\n";
-        if (cfg->flushImmediatly)
+        if (cfg->logToConsole)
         {
-            cout.flush();
+            cout << msg << "\n";
+            if (cfg->flushImmediatly)
+            {
+                cout.flush();
+            }
+        }
+
+        if (cfg->logWriter != NULL && cfg->logDest != NULL)
+        {
+            *cfg->logWriter << msg << "\n";
         }
     }
-
-    if (cfg->logWriter != NULL && cfg->logDest != NULL)
+    else
     {
-        *cfg->logWriter << msg << "\n";
+        throw "Configuration for logger is not instantiated, Logger::destroy was called prior to calling LOG_* ";
     }
-
 }
 
 inline QString Logger::lvlName(Level level)
@@ -130,7 +152,11 @@ inline QString Logger::lvlName(Level level)
 
 inline bool Logger::doLog(Level level)
 {
-    return level <= cfg->logLvl;
+    if (cfg != NULL)
+    {
+        return level <= cfg->logLvl;
+    }
+    throw "Configuration for logger is not instantiated, Logger::destroy was called prior to calling LOG_* ";
 }
 
 void Logger::init(LoggerCfg *loggerCgf)

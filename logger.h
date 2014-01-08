@@ -55,7 +55,9 @@ typedef struct LoggerCfg
     QTextStream *logWriter;
 
     LoggerCfg(bool logToConsole, bool flushImmediatly, logger::Level logLvl, QIODevice *logDest);
+    LoggerCfg(QIODevice *logDest);
     LoggerCfg();
+
     ~LoggerCfg();
 
 } LoggerCfg;
