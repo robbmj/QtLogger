@@ -3,7 +3,7 @@ QtLogger
 
 A simple logger for Qt
 
-To use this logger add it as an external library to your Qt project. 
+To use this logger add it as an external library to your Qt project. http://qt-project.org/doc/qtcreator-2.6/creator-project-qmake-libraries.html
 
 Sample usages:
 
