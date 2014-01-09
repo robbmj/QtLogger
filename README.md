@@ -41,20 +41,26 @@ Also you may configure logger to print to an QIODevice, this can be configured i
 
     LoggerCfg *cfg = new LoggerCfg(new QFile("log.txt"));
     Logger::init(cfg);
-
+    // run the application
+    Logger::destroy();
+    
 logger takes responsibility for managing the memory allocated to the LoggerCfg object. Other configuration options include:
 
-    // If false logger will not write to stdout. defaults to true
+    // If false logger will not write to stdout. Defaults to true
     bool logToConsole,
-    // If set to false will only flush log messages when the buffer reaches its capasity. fefaults to true
+    // If set to false will only flush log messages when the buffer reaches its capasity. Defaults to true
     bool flushImmediatly, 
-    // The default log lvl. if level is set to Debug all Verbose messages will be ignored. defaults to verbose
+    // The default log lvl. if level is set to Debug all Verbose messages will be ignored. Defaults to verbose
     logger::Level logLvl,
-    // If instantiated logger will write to the QIODevice. defaults to NULL
+    // If instantiated logger will write to the QIODevice. Defaults to NULL
     QIODevice *logDest
 
 Log lvl options:
     Fatel, Critical, Warning, Info, Debug, Verbose
 
+In the example below logger will not print to stdout, it will not flush the buffer on each call, Verbose and Debug messages will be ignored and it will write to a file called log.txt.
 
-
+    LoggerCfg *cfg = new LoggerCfg(false, false, Info, new QFile("log.txt"));
+    Logger::init(cfg);
+    // run the application
+    Logger::destroy();
