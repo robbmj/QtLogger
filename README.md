@@ -11,7 +11,8 @@ external library to your Qt project
 Sample usages:
 
     #include <logger.h>
-    #define __CLASS__ "Main" The class the message is being printed from
+    // The class the message is being printed from
+    #define __CLASS__ "Main"
     using namespace logger;
 
     int main(int argc, char *argv[])
