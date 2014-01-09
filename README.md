@@ -39,7 +39,7 @@ The log level options are:
     LOG_DEBUG(bool logIf = true)
     LOG_VERBOSE(bool logIf = true)
 
-Each of the LOG_* calls optionaly takes exactly one bool. If the value is false the log message will not be printed.
+Each of the LOG_* calls optionally takes exactly one bool. If the value is false the log message will not be printed.
 
 Also you may configure logger to print to a QIODevice, this can be configured in the following way
 
@@ -74,9 +74,9 @@ logger behaves in the same way as qDebug and is as easy to use.
     LOG_DEBUG() << "QPoint:" << qPoint << true << 1.1 << 'c';
     DEBUG {2014-01-09T08:20:08} [ClearBack::ClearBack]#25: QPoint: QPoint(500,112) true 1.1 c
     
-Except now you get the log level that printed the message, the timestamp of when the message was printed, the class name, the method name and the line number from where the message was printed. 
+Except now you get the log level that printed the message, the time stamp of when the message was printed, the class name, the method name and the line number from where the message was printed.
 
 With thanks to
 <a href="http://www.linkedin.com/profile/view?id=14921915&authType=name&authToken=xCas&trk=wvmx-profile-title">
 Mr. Constantine grantcharov
-</a> for some of the orignal insperation for this logger
+</a> for some of the original inspiration for this logger
