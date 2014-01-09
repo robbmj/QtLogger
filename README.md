@@ -64,3 +64,10 @@ In the example below logger will not print to stdout, it will not flush the buff
     Logger::init(cfg);
     // run the application
     Logger::destroy();
+    
+logger behaves in the same way as qDebug and is as easy to use.
+
+    LOG_DEBUG() << "QPoint:" << qPoint << true << 1.1 << 'c';
+    DEBUG {2014-01-09T08:20:09} [ClearBack::ClearBack]#25 QPoint: QPoint(500,112) true 1.1 c
+    
+Except now you get the log level that printed the message, the timestamp of when the message was printed, the class name, the method name and the line number from where the message was printed. 
