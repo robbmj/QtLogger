@@ -135,7 +135,6 @@ void Logger::msgHandler(QtMsgType type, const QMessageLogContext &context, const
             if (cfg->flushImmediatly)
             {
                 cfg->logWriter->flush();
-                cout.flush();
             }
         }
     }

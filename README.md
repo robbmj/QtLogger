@@ -40,7 +40,7 @@ The log level options are:
 
 Each of the LOG_* calls optionaly takes exactly one bool. If the value is false the log message will not be printed.
 
-Also you may configure logger to print to an QIODevice, this can be configured in the following way
+Also you may configure logger to print to a QIODevice, this can be configured in the following way
 
     LoggerCfg *cfg = new LoggerCfg(new QFile("log.txt"));
     Logger::init(cfg);
@@ -71,6 +71,6 @@ In the example below logger will not print to stdout, it will not flush the buff
 logger behaves in the same way as qDebug and is as easy to use.
 
     LOG_DEBUG() << "QPoint:" << qPoint << true << 1.1 << 'c';
-    DEBUG {2014-01-09T08:20:09} [ClearBack::ClearBack]#25 QPoint: QPoint(500,112) true 1.1 c
+    DEBUG {2014-01-09T08:20:09} [ClearBack::ClearBack]#25: QPoint: QPoint(500,112) true 1.1 c
     
 Except now you get the log level that printed the message, the timestamp of when the message was printed, the class name, the method name and the line number from where the message was printed. 
