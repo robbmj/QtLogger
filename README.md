@@ -75,3 +75,8 @@ logger behaves in the same way as qDebug and is as easy to use.
     DEBUG {2014-01-09T08:20:08} [ClearBack::ClearBack]#25: QPoint: QPoint(500,112) true 1.1 c
     
 Except now you get the log level that printed the message, the timestamp of when the message was printed, the class name, the method name and the line number from where the message was printed. 
+
+With thanks to
+<a href="http://www.linkedin.com/profile/view?id=14921915&authType=name&authToken=xCas&trk=wvmx-profile-title">
+Mr. Constantine grantcharov
+</a> for some of the orignal insperation for this logger
