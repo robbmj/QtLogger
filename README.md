@@ -77,6 +77,6 @@ logger behaves in the same way as qDebug and is as easy to use.
 Except now you get the log level that printed the message, the time stamp of when the message was printed, the class name, the method name and the line number from where the message was printed.
 
 With thanks to
-<a href="http://www.linkedin.com/profile/view?id=14921915&authType=name&authToken=xCas&trk=wvmx-profile-title">
+<a href="http://ca.linkedin.com/pub/constantine-grantcharov/4/bb7/44b">
 Mr. Constantine grantcharov
 </a> for some of the original inspiration for this logger
