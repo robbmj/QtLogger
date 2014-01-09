@@ -73,11 +73,13 @@ Logger::Logger(const string &clazz, const string &func, int line, Level lvl, boo
 {
    if (this->logif)
    {
-       // the log level name
-       msg = lvlName(lvl) +
+       msg =   "<LOG_HEADER>" +
+
+               // the log level name
+               lvlName(lvl) +
 
                // the current date time
-               " {" + QDateTime::currentDateTime().toString(Qt::ISODate) + "}" +
+               " {" + QDateTime::currentDateTime().toString(Qt::ISODate) + "} " +
 
                // class name
                "[" + QString::fromStdString(clazz) +
@@ -86,7 +88,9 @@ Logger::Logger(const string &clazz, const string &func, int line, Level lvl, boo
                "::" + QString::fromStdString(func) + "]#" +
 
                // the line number
-               QString::number(line);
+               QString::number(line) + ":" +
+
+               "</LOG_HEADER>";
    }
 }
 
@@ -112,9 +116,11 @@ void Logger::msgHandler(QtMsgType type, const QMessageLogContext &context, const
 
     if (cfg != NULL)
     {
+        QString newMsg = removeQuotesIfLogHeader(msg);
+
         if (cfg->logToConsole)
         {
-            cout << msg << "\n";
+            cout << newMsg << "\n";
 
             if (cfg->flushImmediatly)
             {
@@ -124,7 +130,7 @@ void Logger::msgHandler(QtMsgType type, const QMessageLogContext &context, const
 
         if (cfg->logWriter != NULL && cfg->logDest != NULL)
         {
-            *cfg->logWriter << msg << "\n";
+            *cfg->logWriter << newMsg << "\n";
 
             if (cfg->flushImmediatly)
             {
@@ -137,6 +143,17 @@ void Logger::msgHandler(QtMsgType type, const QMessageLogContext &context, const
     {
         throw "Configuration for logger is not instantiated, Logger::destroy was called prior to calling LOG_* ";
     }
+}
+
+inline QString Logger::removeQuotesIfLogHeader(const QString &msg)
+{
+    if (msg.startsWith("\"<LOG_HEADER>"))
+    {
+        QString quotesRemoved(msg);
+        quotesRemoved = quotesRemoved.remove(0, 13);
+        return quotesRemoved.remove(quotesRemoved.indexOf("</LOG_HEADER>\""), 14);
+    }
+    return msg;
 }
 
 inline QString Logger::lvlName(Level level)

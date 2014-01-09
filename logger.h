@@ -81,6 +81,7 @@ private:
     static LoggerCfg *cfg;
     static inline QString lvlName(Level level);
     static inline bool doLog(Level level);
+    static inline QString removeQuotesIfLogHeader(const QString &);
 };
 
 }
