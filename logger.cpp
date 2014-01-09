@@ -115,6 +115,7 @@ void Logger::msgHandler(QtMsgType type, const QMessageLogContext &context, const
         if (cfg->logToConsole)
         {
             cout << msg << "\n";
+
             if (cfg->flushImmediatly)
             {
                 cout.flush();
@@ -124,6 +125,12 @@ void Logger::msgHandler(QtMsgType type, const QMessageLogContext &context, const
         if (cfg->logWriter != NULL && cfg->logDest != NULL)
         {
             *cfg->logWriter << msg << "\n";
+
+            if (cfg->flushImmediatly)
+            {
+                cfg->logWriter->flush();
+                cout.flush();
+            }
         }
     }
     else
