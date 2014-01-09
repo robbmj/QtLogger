@@ -8,7 +8,7 @@ To use this logger add it as an external library to your Qt project.
 Sample usages:
 
     #include <logger.h>
-    #define __CLASS__ "ClearBack"
+    #define __CLASS__ "Main" The class the message is being printed from
     using namespace logger;
 
     int main(int argc, char *argv[])
