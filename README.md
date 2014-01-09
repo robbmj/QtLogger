@@ -78,5 +78,5 @@ Except now you get the log level that printed the message, the time stamp of whe
 
 With thanks to
 <a href="http://ca.linkedin.com/pub/constantine-grantcharov/4/bb7/44b">
-Mr. Constantine grantcharov
-</a> for some of the original inspiration for this logger
+Mr. Constantine Grantcharov
+</a> for some of the original inspiration for this logger.
