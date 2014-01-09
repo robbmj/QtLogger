@@ -140,7 +140,7 @@ void Logger::msgHandler(QtMsgType type, const QMessageLogContext &context, const
     }
     else
     {
-        throw "Configuration for logger is not instantiated, Logger::destroy was called prior to calling LOG_* ";
+        throw "Configuration for logger is not instantiated, Logger::destroy was called prior to calling LOG_*";
     }
 }
 
@@ -175,7 +175,7 @@ inline bool Logger::doLog(Level level)
     {
         return level <= cfg->logLvl;
     }
-    throw "Configuration for logger is not instantiated, Logger::destroy was called prior to calling LOG_* ";
+    throw "Configuration for logger is not instantiated, Logger::destroy was called prior to calling LOG_*";
 }
 
 void Logger::init(LoggerCfg *loggerCgf)
