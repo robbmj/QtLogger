@@ -28,7 +28,7 @@ Sample usages:
 
 The log level options are:
 
-    LOG_FATEL(bool logIf = true)     // the logger will not stop execution
+    LOG_FATAL(bool logIf = true)     // the logger will not stop execution
     LOG_CRITICAL(bool logIf = true)
     LOG_WARNING(bool logIf = true)
     LOG_INFO(bool logIf = true)
@@ -56,7 +56,7 @@ logger takes responsibility for managing the memory allocated to the LoggerCfg o
     QIODevice *logDest = NULL
 
 Log lvl options:
-    Fatel, Critical, Warning, Info, Debug, Verbose
+    Fatal, Critical, Warning, Info, Debug, Verbose
 
 In the example below logger will not print to stdout, it will not flush the buffer on each call, Verbose and Debug messages will be ignored and it will write to a file called log.txt.
 
