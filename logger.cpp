@@ -1,10 +1,7 @@
+
 #include "logger.h"
-
-#include <QBuffer>
 #include <QDateTime>
-
 #include <QtCore/QDebug>
-
 #include <iostream>
 
 namespace logger
@@ -104,7 +101,6 @@ QDebug Logger::log()
     else
     {
         QDebug writer(&dummyStr);
-        writer << msg;
         return writer;
     }
 }
