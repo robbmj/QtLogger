@@ -1,8 +1,8 @@
 
 #include "logger.h"
+
 #include <QDateTime>
 #include <QtCore/QDebug>
-#include <iostream>
 
 namespace logger
 {
